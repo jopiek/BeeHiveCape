@@ -1,0 +1,29 @@
+Partlist
+
+Exported from HiveCape1.0.brd at 18-07-14 01:05
+
+EAGLE Version 6.6.0 Copyright (c) 1988-2014 CadSoft
+
+Assembly variant: 
+
+Part     Value              Package           Library            Position (mm)         Orientation
+
+24AA256T EEPROM-I2CSMD      SO08              SparkFun-DigitalIC (6.35 13.97)          R90
+C1       0.1uF              0805              SparkFun           (10.16 17.78)         R180
+C2       4.7uF              EIA6032           SparkFun           (30.48 77.47)         MR0
+C3       .1uF               0805              SparkFun           (24.23 75.6)          MR90
+C4       10uF               EIA6032           SparkFun           (21.59 74.93)         MR90
+IC1      SPX1117M3-L-3-3/TR SOT223            SparkFun-PowerIC   (30.48 67.31)         MR180
+JA0      SOLDERJUMPERNO     SJ_2S-NO          SparkFun           (6.35 11.43)          MR180
+JA1      SOLDERJUMPERNO     SJ_2S-NO          SparkFun           (6.35 13.97)          MR180
+JA2      SOLDERJUMPERNO     SJ_2S-NO          SparkFun           (6.35 16.51)          MR180
+JP1      M10"               1X10              SparkFun           (43.18 80.645)        R270
+JP2      M10"               1X10              SparkFun           (43.18 51.435)        R270
+JP3      M10"               1X10              SparkFun           (12.7 28.575)         R90
+JP4      M10"               1X10              SparkFun           (12.7 57.785)         R90
+R1       4.75k              0603-ARV          SparkFun-Resistors (9.86 13.97)          MR270
+R2       5k6                0603-ARV          SparkFun-Resistors (2.54 13.97)          MR90
+U$1      BEAGLEBONE_OUTLINE BEAGLEBONE_SHIELD jk_customs         (0 0)                 R0
+U$2      XBEE               XBEE              adafruit           (27.94 73.025)        R0
+U$3      XBEE               XBEE              adafruit           (27.94 43.815)        R0
+WRPROT   SOLDERJUMPERNO     SJ_2S-NO          SparkFun           (9.38 18.11)          MR180
