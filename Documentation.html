@@ -1,0 +1,95 @@
+HiveCape 1.1
+
+------------
+
+https://github.com/adafruit/adafruit-beaglebone-io-python
+
+
+/usr/bin/ntpdate -b -s -u pool.ntp.org
+opkg update && opkg install python-pip python-setuptools
+pip install Adafruit_BBIO
+
+http://beaglebone.cameon.net/home/serial-ports-uart
+
+
+To enable the uarts 1,2,4 and/or 5 on the BeagleBone Black, rev A, B and C:
+Rev A/B: Open the file /media/BEAGLEBONE/uEnv.txt in an editor (vim/nano)
+Rev C: Open the file /boot/uboot/uEnv.txt in an editor (vim/nano)
+Add the key "capemgr.enable_partno="
+Add the ports you want to enable, comma separated (BB-UART2, BB-UART5)
+Reboot (command: reboot)
+
+An example line looks like this:
+root@beaglebone:/dev# cat /media/BEAGLEBONE/uEnv.txt
+optargs=quiet drm.debug=7 capemgr.enable_partno=BB-UART2, BB-UART5
+
+After reboot, the device is present in the device list:
+root@beaglebone:/dev# ls -l /dev/ttyO*
+crw--w---- 1 root tty     248, 0 Jan  1 01:21 /dev/ttyO0
+crw-rw---- 1 root dialout 248, 2 Jan  1 01:40 /dev/ttyO2
+crw-rw---- 1 root dialout 248, 5 Jan  1 01:40 /dev/ttyO5
+
+note: it is tty Oh 2/5, not tty zero 2/5
+
+http://hipstercircuits.com/enable-serialuarttty-on-beaglebone-black/
+
+echo BB-UART2 > /sys/devices/bone_capemgr.xxx/slots
+xxx was 8 in my case (check /sys/devices/ (cd /sys/devices [enter] ls [enter]))
+
+
+3. Working with the BeeHive Cape
+
+3a How to see if you get a connection
+
+There are more than one solutions for this.
+The easiest way is getting two XBee modules (both from the same series, so S1 or S2).
+
+You have the option to also get an XBee Explorer (https://www.sparkfun.com/products/8687 or something like that) (recommended).
+If you don't have an XBee Explorer (or compatible) you can also plug the two XBee modules directly to the two XBee sockets on the BeeHive Cape.
+
+3b XBee Explorer 
+Connect the XBee Explorer to you computer
+Open a terminal (I use CoolTerm) but you could even use XCTU(ng)
+Make sure you are connected to your local XBee module
+
+Connect the XBee module to the first XBee module socket (UART 2) 
+In the terminal of the BeagleBone Black:
+minicom -b 9600 -D /dev/ttyO2
+
+Type something in the terminal and see the result on your computer and vice-versa.
+
+3c If you don't have an XBee Explorer:
+- get an XBee Explorer
+- while you wait for the delivery guy:
+open a second terminal and SSH to you beaglebone
+- plug the second XBee into your other BeeHive Cape socket (UART 5) 
+
+minicom -b 9600 -D /dev/ttyO5
+
+Type something in the first terminal (O2) and see it in the other (O5) and vice versa.
+
+4 BoneScript with the BeeHive Shield
+
+The following BoneScript source will open a connection on UART2. When you send characters from the terminal on your computer or other device it will show them in the console and send them back as an echo.
+
+var b = require('bonescript');
+var port = '/dev/ttyO2'; // desired UART, O2 or O5 for the BeeHive
+var options = {
+    baudrate: 9600 // baudrate
+};
+
+b.serialOpen(port, options, onSerial);
+
+function onSerial(x) {
+    if (x.err) {
+        console.log('***ERROR*** ' + JSON.stringify(x)); // whoops... something wrong!?!
+    }
+    if (x.event == 'open') {
+       console.log('***OPENED***');  // now we are talking
+    }
+    if (x.event == 'data') {
+        console.log(String(x.data)); // show received characters in console
+        b.serialWrite(port, x.data); // echo back received characters
+    }
+}
+
